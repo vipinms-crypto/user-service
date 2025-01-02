@@ -1,18 +1,21 @@
 package com.user.userservice.entity;
 
-import java.util.Date;
+import java.time.LocalDateTime;
+
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.Temporal;
-import jakarta.persistence.TemporalType;
+import jakarta.persistence.Table;
 import lombok.Data;
 
 @Entity
 @Data
+@Table(name = "[user]", schema = "dbo")
 public class User {
 
     @Id
@@ -51,12 +54,13 @@ public class User {
     @Column(length = 50)
     private String userCreatedBy;
 
-    @Temporal(TemporalType.DATE)
-    private Date userCreatedDatetime;
+    @CreationTimestamp
+    @Column(updatable = false)
+    private LocalDateTime userCreatedDatetime;
 
     @Column(length = 50)
     private String userUpdatedBy;
 
-    @Temporal(TemporalType.DATE)
-    private Date userUpdatedDatetime;
+    @UpdateTimestamp
+    private LocalDateTime userUpdatedDatetime;
 }
