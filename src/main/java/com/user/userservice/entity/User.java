@@ -25,7 +25,7 @@ public class User {
     @Column(length = 50)
     private String userName;
 
-    @Column(length = 50)
+    @Column(length = 255)
     private String userPassword;
 
     @Column(length = 50)

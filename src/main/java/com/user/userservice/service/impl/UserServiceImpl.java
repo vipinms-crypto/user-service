@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.user.userservice.dto.requestDto.UserRequestDto;
@@ -30,12 +31,16 @@ public class UserServiceImpl implements UserService {
 	@Autowired
 	private UserMapper userMapper;
 
+	@Autowired
+	PasswordEncoder passwordEncoder;
+	
     @Override
     public UserResponseDto createUser(UserRequestDto userRequestDto) {
     	User savedUser = null;
     	try {
 			log.info("Entered into service method createUser");
 			User user = userMapper.toEntity(userRequestDto);
+			user.setUserPassword(passwordEncoder.encode(user.getUserPassword()));
 			savedUser = userRepository.save(user);
 			log.info("Exit from service method createUser");
 			return mapToResponseDto(savedUser);
