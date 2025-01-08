@@ -22,13 +22,13 @@ import com.user.userservice.utils.AuthEntryPointJwt;
 @EnableWebSecurity
 public class SecurityConfig {
 
-//    private final UserDetailsService myUserDetailsService;
-//    private final JwtRequestFilter jwtRequestFilter;
-//
-//    public SecurityConfig(UserDetailsService myUserDetailsService, JwtRequestFilter jwtRequestFilter) {
-//        this.myUserDetailsService = myUserDetailsService;
-//        this.jwtRequestFilter = jwtRequestFilter;
-//    }
+    private final UserDetailsService myUserDetailsService;
+    private final JwtRequestFilter jwtRequestFilter;
+
+    public SecurityConfig(UserDetailsService myUserDetailsService, JwtRequestFilter jwtRequestFilter) {
+        this.myUserDetailsService = myUserDetailsService;
+        this.jwtRequestFilter = jwtRequestFilter;
+    }
 	
 	@Autowired
 	UserDetailsService userDetailsService;
@@ -36,20 +36,20 @@ public class SecurityConfig {
 	@Autowired
 	private AuthEntryPointJwt unauthorizedHandler;
 
-//    @Bean
-//    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-//        http
-//            .csrf(csrf -> csrf.disable())
-//            .sessionManagement(sessionManagement -> 
-//                sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-//            .authorizeHttpRequests(authorizeRequests -> 
-//                authorizeRequests
-//                    .requestMatchers("/api/register","/users/authenticate").permitAll()
-//                    .anyRequest().authenticated()
-//            );
-//        http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
-//        return http.build();
-//    }
+    @Bean
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        http
+            .csrf(csrf -> csrf.disable())
+            .sessionManagement(sessionManagement -> 
+                sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+            .authorizeHttpRequests(authorizeRequests -> 
+                authorizeRequests
+                    .requestMatchers("/api/register","/users/authenticate","/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
+                    .anyRequest().authenticated()
+            );
+        http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
+        return http.build();
+    }
 //
 //    @Bean
 //    public AuthenticationManager authenticationManager(HttpSecurity http) throws Exception {
@@ -88,18 +88,18 @@ public class SecurityConfig {
 		return new BCryptPasswordEncoder();
 	}
 	
-	@Bean
-	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-		http.csrf(csrf -> csrf.disable())
-				.exceptionHandling(exception -> exception.authenticationEntryPoint(unauthorizedHandler))
-				.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-				.authorizeHttpRequests(auth -> auth.requestMatchers("/api/register").permitAll()
-						.requestMatchers("/users/authenticate").permitAll().anyRequest().authenticated());
-
-		http.authenticationProvider(authenticationProvider());
-
-		http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
-
-		return http.build();
-	}
+//	@Bean
+//	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+//		http.csrf(csrf -> csrf.disable())
+//				.exceptionHandling(exception -> exception.authenticationEntryPoint(unauthorizedHandler))
+//				.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+//				.authorizeHttpRequests(auth -> auth.requestMatchers("/api/register").permitAll()
+//						.requestMatchers("/users/authenticate").permitAll().requestMatchers("/swagger-ui/").permitAll().anyRequest().authenticated());
+//
+//		http.authenticationProvider(authenticationProvider());
+//
+//		http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
+//
+//		return http.build();
+//	}
 }
