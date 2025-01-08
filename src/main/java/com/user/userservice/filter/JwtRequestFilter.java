@@ -11,7 +11,7 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import com.user.userservice.utils.JwtUtil;
+import com.user.userservice.service.JWTService;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -23,9 +23,10 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 
     @Autowired
     private UserDetailsService userDetailsService;
-
+    
     @Autowired
-    private JwtUtil jwtUtil;
+    private JWTService jwtService;
+    
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
@@ -34,18 +35,18 @@ public class JwtRequestFilter extends OncePerRequestFilter {
         final String authorizationHeader = request.getHeader("Authorization");
 
         String username = null;
-        String jwt = null;
+        String token = null;
 
         if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
-            jwt = authorizationHeader.substring(7);
-            username = jwtUtil.extractUsername(jwt);
+        	token = authorizationHeader.substring(7);
+            username = jwtService.extractUsername(token);
         }
 
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
 
             UserDetails userDetails = this.userDetailsService.loadUserByUsername(username);
 
-            if (jwtUtil.validateToken(jwt, userDetails)) {
+            if (jwtService.validateToken(token, userDetails)) {
 
                 UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
                         userDetails, null, userDetails.getAuthorities());

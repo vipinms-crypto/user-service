@@ -6,12 +6,14 @@ public class ErrorDetails {
 	private Date timestamp;
     private String message;
     private String details;
+    private String errorCode;
 
-    public ErrorDetails(Date timestamp, String message, String details) {
+    public ErrorDetails(Date timestamp, String message, String details,String errorCode) {
         super();
         this.timestamp = timestamp;
         this.message = message;
         this.details = details;
+        this.errorCode = errorCode;
     }
 
 	public Date getTimestamp() {
@@ -36,6 +38,14 @@ public class ErrorDetails {
 
 	public void setDetails(String details) {
 		this.details = details;
+	}
+
+	public String getErrorCode() {
+		return errorCode;
+	}
+
+	public void setErrorCode(String errorCode) {
+		this.errorCode = errorCode;
 	}
     
 }

@@ -3,48 +3,39 @@ package com.user.userservice.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.user.userservice.dto.requestDto.AuthenticationRequest;
-import com.user.userservice.dto.responseDto.AuthenticationResponse;
-import com.user.userservice.service.MyUserDetailsService;
-import com.user.userservice.utils.JwtUtil;
+import com.user.userservice.service.JWTService;
+
+import lombok.extern.slf4j.Slf4j;
 
 @RestController
-@RequestMapping("/users")
+@RequestMapping("/api")
+@Slf4j
 public class AuthenticationController {
 
-    @Autowired
-    private AuthenticationManager authenticationManager;
+	@Autowired
+	private AuthenticationManager authenticationManager;
 
-    @Autowired
-    private MyUserDetailsService userDetailsService;
+	@Autowired
+	JWTService JWTService;
 
-    @Autowired
-    private JwtUtil jwtUtil;
+	@PostMapping("/authenticate")
+	public String createAuthenticationToken(@RequestBody AuthenticationRequest authenticationRequest) throws Exception {
+		Authentication auth = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
+				authenticationRequest.getUsername(), authenticationRequest.getPassword()));
 
-    @PostMapping("/authenticate")
-    public AuthenticationResponse createAuthenticationToken(@RequestBody AuthenticationRequest authenticationRequest) throws Exception {
-        try {
-			authenticationManager.authenticate(
-			        new UsernamePasswordAuthenticationToken(authenticationRequest.getUsername(), authenticationRequest.getPassword())
-			);
-
-			final UserDetails userDetails = userDetailsService.loadUserByUsername(authenticationRequest.getUsername());
-			final String jwt = jwtUtil.generateToken(userDetails.getUsername());
-
-			return new AuthenticationResponse(jwt);
-		} catch (UsernameNotFoundException e) {
-			e.printStackTrace();
-		} catch (AuthenticationException e) {
-			e.printStackTrace();
+		if (auth.isAuthenticated()) {
+			log.info("User authenticated");
+			return JWTService.generateJwtToken(authenticationRequest.getUsername());
 		}
+		log.info("User not authenticated");
 		return null;
-    }
+
+	}
 }
