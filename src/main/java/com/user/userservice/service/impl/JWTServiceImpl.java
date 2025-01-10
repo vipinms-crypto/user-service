@@ -1,13 +1,10 @@
 package com.user.userservice.service.impl;
 
-import java.security.NoSuchAlgorithmException;
-import java.util.Base64;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 
-import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
 
 import org.springframework.security.core.userdetails.UserDetails;
@@ -25,19 +22,19 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class JWTServiceImpl implements JWTService{
 
-	String secertKey = "";
-	public JWTServiceImpl() {
-		super();
-		
-		try {
-			KeyGenerator keyGen = KeyGenerator.getInstance("HmacSHA256");
-			SecretKey sk = keyGen.generateKey();
-			secertKey = Base64.getEncoder().encodeToString(sk.getEncoded());
-			
-		} catch (NoSuchAlgorithmException e) {
-			log.error("Error occured while generateJwtToken()");
-		}
-	}
+	public static final String secertKey = "5367566B59703373367639792F423F4528482B4D6251655468576D5A71347437";
+//	public JWTServiceImpl() {
+//		super();
+//		
+//		try {
+//			KeyGenerator keyGen = KeyGenerator.getInstance("HmacSHA256");
+//			SecretKey sk = keyGen.generateKey();
+//			secertKey = Base64.getEncoder().encodeToString(sk.getEncoded());
+//			
+//		} catch (NoSuchAlgorithmException e) {
+//			log.error("Error occured while generateJwtToken()");
+//		}
+//	}
 
 	@Override
 	public String generateJwtToken(String userName) {
