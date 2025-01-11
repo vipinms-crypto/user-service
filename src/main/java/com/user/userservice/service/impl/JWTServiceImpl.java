@@ -7,9 +7,13 @@ import java.util.function.Function;
 
 import javax.crypto.SecretKey;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
+import com.user.userservice.dto.responseDto.LoginResponseDto;
+import com.user.userservice.entity.User;
+import com.user.userservice.repository.UserRepository;
 import com.user.userservice.service.JWTService;
 
 import io.jsonwebtoken.Claims;
@@ -23,19 +27,10 @@ import lombok.extern.slf4j.Slf4j;
 public class JWTServiceImpl implements JWTService{
 
 	public static final String secertKey = "5367566B59703373367639792F423F4528482B4D6251655468576D5A71347437";
-//	public JWTServiceImpl() {
-//		super();
-//		
-//		try {
-//			KeyGenerator keyGen = KeyGenerator.getInstance("HmacSHA256");
-//			SecretKey sk = keyGen.generateKey();
-//			secertKey = Base64.getEncoder().encodeToString(sk.getEncoded());
-//			
-//		} catch (NoSuchAlgorithmException e) {
-//			log.error("Error occured while generateJwtToken()");
-//		}
-//	}
-
+	
+	@Autowired
+	UserRepository userRepo;
+	
 	@Override
 	public String generateJwtToken(String userName) {
 		log.info("Enterd in to generateJwtToken()");
@@ -113,6 +108,12 @@ public class JWTServiceImpl implements JWTService{
 	 */
 	public Date extractExpiration(String token) {
 		return extractClaim(token, Claims::getExpiration);
+	}
+	@Override
+	public void getUserDetails(LoginResponseDto resDto, String userName) {
+		User user = userRepo.findByUserName(userName);
+		resDto.setUserId(user.getUserId());
+		resDto.setUserName(userName);
 	}
 
 }
