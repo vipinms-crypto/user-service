@@ -7,11 +7,10 @@ import java.util.function.Function;
 
 import javax.crypto.SecretKey;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
-import com.user.userservice.dto.responseDto.LoginResponseDto;
+import com.user.userservice.dto.responsedto.LoginResponseDto;
 import com.user.userservice.entity.User;
 import com.user.userservice.repository.UserRepository;
 import com.user.userservice.service.JWTService;
@@ -26,21 +25,23 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class JWTServiceImpl implements JWTService{
 
-	public static final String secertKey = "5367566B59703373367639792F423F4528482B4D6251655468576D5A71347437";
+	public static final String SECRETKEY = "5367566B59703373367639792F423F4528482B4D6251655468576D5A71347437";
 	
-	@Autowired
 	UserRepository userRepo;
-	
+	public JWTServiceImpl(UserRepository userRepo) {
+		super();
+		this.userRepo = userRepo;
+	}
 	@Override
 	public String generateJwtToken(String userName) {
 		log.info("Enterd in to generateJwtToken()");
-		Map<String, Object> claims = new HashMap<String, Object>();
+		Map<String, Object> claims = new HashMap<>();
 		return Jwts.builder().claims().add(claims).subject(userName).issuedAt(new Date(System.currentTimeMillis()
 				)).expiration(new Date(System.currentTimeMillis() * 60 *6- 15)).and().signWith(getSecretKey()).compact();
 		
 	}
 	private SecretKey getSecretKey() {
-		byte[] keyBytes = Decoders.BASE64.decode(secertKey);
+		byte[] keyBytes = Decoders.BASE64.decode(SECRETKEY);
 		return Keys.hmacShaKeyFor(keyBytes);
 	}
 

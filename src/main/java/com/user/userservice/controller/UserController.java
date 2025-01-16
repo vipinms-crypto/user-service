@@ -3,7 +3,6 @@ package com.user.userservice.controller;
 import java.util.List;
 import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -15,8 +14,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.user.userservice.dto.requestDto.UserRequestDto;
-import com.user.userservice.dto.responseDto.UserResponseDto;
+import com.user.userservice.dto.requestdto.UserRequestDto;
+import com.user.userservice.dto.responsedto.UserResponseDto;
 import com.user.userservice.exception.DuplicateKeyException;
 import com.user.userservice.service.UserService;
 
@@ -32,8 +31,12 @@ import lombok.extern.slf4j.Slf4j;
 @Tag(name = "User API", description = "API for managing users")
 public class UserController {
 
-	@Autowired
 	private UserService userService;
+
+	public UserController(UserService userService) {
+		super();
+		this.userService = userService;
+	}
 
 	@GetMapping
 	@Operation(summary = "Fetch all users", description = "Retrieve a list of all users")

@@ -1,6 +1,5 @@
 package com.user.userservice.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -10,8 +9,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.user.userservice.dto.requestDto.AuthenticationRequest;
-import com.user.userservice.dto.responseDto.LoginResponseDto;
+import com.user.userservice.dto.requestdto.AuthenticationRequest;
+import com.user.userservice.dto.responsedto.LoginResponseDto;
 import com.user.userservice.service.JWTService;
 
 import lombok.extern.slf4j.Slf4j;
@@ -21,11 +20,13 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class AuthenticationController {
 
-	@Autowired
 	private AuthenticationManager authenticationManager;
-
-	@Autowired
-	JWTService JWTService;
+	private JWTService JWTService;
+	
+	AuthenticationController(AuthenticationManager authenticationManager , JWTService JWTService){
+		this.authenticationManager = authenticationManager;
+		this.JWTService = JWTService;
+	}
 
 	@PostMapping("/authenticate")
 	public String createAuthenticationToken(@RequestBody AuthenticationRequest authenticationRequest) throws Exception {
