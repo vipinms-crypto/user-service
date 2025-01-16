@@ -4,8 +4,8 @@ import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.NullValuePropertyMappingStrategy;
 
-import com.user.userservice.dto.requestDto.UserRequestDto;
-import com.user.userservice.dto.responseDto.UserResponseDto;
+import com.user.userservice.dto.requestdto.UserRequestDto;
+import com.user.userservice.dto.responsedto.UserResponseDto;
 import com.user.userservice.entity.User;
 
 @Mapper(componentModel = "spring",nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)

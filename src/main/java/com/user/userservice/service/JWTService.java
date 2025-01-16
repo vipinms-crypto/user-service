@@ -2,7 +2,7 @@ package com.user.userservice.service;
 
 import org.springframework.security.core.userdetails.UserDetails;
 
-import com.user.userservice.dto.responseDto.LoginResponseDto;
+import com.user.userservice.dto.responsedto.LoginResponseDto;
 
 public interface JWTService {
 	

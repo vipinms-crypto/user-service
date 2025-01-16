@@ -1,6 +1,5 @@
 package com.user.userservice.config;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -22,14 +21,13 @@ import com.user.userservice.filter.JwtRequestFilter;
 public class SecurityConfig {
 
     private final JwtRequestFilter jwtRequestFilter;
+    private UserDetailsService userDetailsService;
 
-    public SecurityConfig(JwtRequestFilter jwtRequestFilter) {
+    public SecurityConfig(JwtRequestFilter jwtRequestFilter, UserDetailsService userDetailsService) {
         this.jwtRequestFilter = jwtRequestFilter;
+        this.userDetailsService = userDetailsService;
     }
 	
-	@Autowired
-	UserDetailsService userDetailsService;
-
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http

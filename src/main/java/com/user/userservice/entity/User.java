@@ -1,5 +1,6 @@
 package com.user.userservice.entity;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 import org.hibernate.annotations.CreationTimestamp;
@@ -16,9 +17,14 @@ import lombok.Data;
 @Entity
 @Data
 @Table(name = "[user]", schema = "dbo")
-public class User {
+public class User  implements Serializable{
 
-    @Id
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = -797836535392237379L;
+
+	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int userId;
 
